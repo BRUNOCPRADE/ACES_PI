@@ -1,0 +1,156 @@
+/* Lógico_1: */
+
+CREATE TABLE medico (
+    CRM VARCHAR,
+    ID_Medico INT,
+    fk_usuario_cpf VARCHAR,
+    fk_clinica_ID_Clinica INT,
+    PRIMARY KEY (ID_Medico, fk_usuario_cpf)
+);
+
+CREATE TABLE usuario (
+    senha VARCHAR,
+    cpf VARCHAR PRIMARY KEY,
+    nome VARCHAR,
+    email VARCHAR,
+    fk_endereco_endereco_PK INT,
+    telefone INT
+);
+
+CREATE TABLE clinica (
+    fk_endereco_endereco_PK INT,
+    Funcionarios VARCHAR,
+    Numero_Pessoas INT,
+    ID_Clinica INT PRIMARY KEY
+);
+
+CREATE TABLE Historico_Consulta_faz (
+    CPF_Paciente VARCHAR,
+    ID_Consulta INT PRIMARY KEY,
+    Receita VARCHAR,
+    Data_da_consulta DATE,
+    fk_Paciente_fk_usuario_cpf VARCHAR,
+    fk_medico_ID_Medico INT,
+    fk_medico_fk_usuario_cpf VARCHAR
+);
+
+CREATE TABLE Gerente_Clinica (
+    Administrador BOOLEAN,
+    fk_usuario_cpf VARCHAR PRIMARY KEY,
+    fk_clinica_ID_Clinica INT
+);
+
+CREATE TABLE Paciente (
+    fk_usuario_cpf VARCHAR PRIMARY KEY
+);
+
+CREATE TABLE Receita (
+    Validade DATE,
+    ID_Receita INT PRIMARY KEY,
+    fk_Historico_Consulta_faz_ID_Consulta INT
+);
+
+CREATE TABLE Remedios (
+    Nome_do_remedio VARCHAR,
+    ID_Remedio INT PRIMARY KEY,
+    Validade DATE,
+    Preco DECIMAL
+);
+
+CREATE TABLE Remedio_indicado_tem (
+    fk_Remedios_ID_Remedio INT,
+    fk_Receita_ID_Receita INT
+);
+
+CREATE TABLE avaliacao_avalia (
+    Nota INT,
+    Data_Avaliacao DATE,
+    Comentario VARCHAR,
+    fk_Paciente_fk_usuario_cpf VARCHAR,
+    fk_medico_ID_Medico INT,
+    fk_medico_fk_usuario_cpf VARCHAR
+);
+
+CREATE TABLE Presenca_vai (
+    Contagem_Pacientes INT,
+    fk_clinica_ID_Clinica INT,
+    fk_Paciente_fk_usuario_cpf VARCHAR
+);
+
+CREATE TABLE endereco (
+    endereco_PK INT NOT NULL PRIMARY KEY,
+    numero INT,
+    cep INT
+);
+ 
+ALTER TABLE medico ADD CONSTRAINT FK_medico_2
+    FOREIGN KEY (fk_usuario_cpf)
+    REFERENCES usuario (cpf)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE medico ADD CONSTRAINT FK_medico_3
+    FOREIGN KEY (fk_clinica_ID_Clinica)
+    REFERENCES clinica (ID_Clinica)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE usuario ADD CONSTRAINT FK_usuario_2
+    FOREIGN KEY (fk_endereco_endereco_PK)
+    REFERENCES endereco (endereco_PK)
+    ON DELETE SET NULL;
+ 
+ALTER TABLE clinica ADD CONSTRAINT FK_clinica_2
+    FOREIGN KEY (fk_endereco_endereco_PK???)
+    REFERENCES ??? (???)
+    ON DELETE SET NULL;
+ 
+ALTER TABLE Historico_Consulta_faz ADD CONSTRAINT FK_Historico_Consulta_faz_2
+    FOREIGN KEY (fk_Paciente_fk_usuario_cpf)
+    REFERENCES Paciente (fk_usuario_cpf);
+ 
+ALTER TABLE Historico_Consulta_faz ADD CONSTRAINT FK_Historico_Consulta_faz_3
+    FOREIGN KEY (fk_medico_ID_Medico, fk_medico_fk_usuario_cpf)
+    REFERENCES medico (ID_Medico, fk_usuario_cpf);
+ 
+ALTER TABLE Gerente_Clinica ADD CONSTRAINT FK_Gerente_Clinica_2
+    FOREIGN KEY (fk_usuario_cpf)
+    REFERENCES usuario (cpf)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE Gerente_Clinica ADD CONSTRAINT FK_Gerente_Clinica_3
+    FOREIGN KEY (fk_clinica_ID_Clinica)
+    REFERENCES clinica (ID_Clinica)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE Paciente ADD CONSTRAINT FK_Paciente_2
+    FOREIGN KEY (fk_usuario_cpf)
+    REFERENCES usuario (cpf)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE Receita ADD CONSTRAINT FK_Receita_2
+    FOREIGN KEY (fk_Historico_Consulta_faz_ID_Consulta)
+    REFERENCES Historico_Consulta_faz (ID_Consulta)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE Remedio_indicado_tem ADD CONSTRAINT FK_Remedio_indicado_tem_1
+    FOREIGN KEY (fk_Remedios_ID_Remedio)
+    REFERENCES Remedios (ID_Remedio);
+ 
+ALTER TABLE Remedio_indicado_tem ADD CONSTRAINT FK_Remedio_indicado_tem_2
+    FOREIGN KEY (fk_Receita_ID_Receita)
+    REFERENCES Receita (ID_Receita);
+ 
+ALTER TABLE avaliacao_avalia ADD CONSTRAINT FK_avaliacao_avalia_1
+    FOREIGN KEY (fk_Paciente_fk_usuario_cpf)
+    REFERENCES Paciente (fk_usuario_cpf);
+ 
+ALTER TABLE avaliacao_avalia ADD CONSTRAINT FK_avaliacao_avalia_2
+    FOREIGN KEY (fk_medico_ID_Medico, fk_medico_fk_usuario_cpf)
+    REFERENCES medico (ID_Medico, fk_usuario_cpf);
+ 
+ALTER TABLE Presenca_vai ADD CONSTRAINT FK_Presenca_vai_1
+    FOREIGN KEY (fk_clinica_ID_Clinica)
+    REFERENCES clinica (ID_Clinica);
+ 
+ALTER TABLE Presenca_vai ADD CONSTRAINT FK_Presenca_vai_2
+    FOREIGN KEY (fk_Paciente_fk_usuario_cpf)
+    REFERENCES Paciente (fk_usuario_cpf);
